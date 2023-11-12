@@ -10,6 +10,26 @@ void freeMap(char** map){
     free(map);
 }
 
+int countRows(char** map){
+    int rowCount = 0;
+    int i = 0;
+    while(map[i][0] == '.' || map[i][0] == '#'){
+        rowCount++;
+        i++;
+    }
+    return rowCount;
+}
+int countCols(char** map){
+    int colCount = 0;
+    int j = 0;
+    while(map[0][j] == '.' || map[0][j] == '#'){
+        colCount++;
+        j++;
+        printf("[%d] %d", colCount, j);
+    }
+    return colCount;
+}
+
 char** loadsave(const char* filename){
     int row;
     int col;
@@ -30,32 +50,19 @@ char** loadsave(const char* filename){
         return NULL;
     }
     //sorok lefoglalása és feltöltése
+    int itemCount = 0;
     for(int i = 0; i<row; i++){
         map[i] = (char*) malloc(col * sizeof(char));
         for(int j = 0; j<col; j++){
             char c = fgetc(save);
             map[i][j] = c;
+            itemCount++;
         }
         //új sor karakter átugrása
         fgetc(save);
         //if(feof(save)) break;
     }
-    /*
-    for(int i = 0; i<row; i++){
-        map[i] = (char*) malloc((col+2) * sizeof(char));
-        //hibakezelés
-        if(map[i] == NULL){
-            perror("nagy a gond");
-            return NULL;
-        }
-        char* temp = malloc((col+2)*sizeof(char));
-        printf("%s\n",temp);
-        fgets(temp, (col+2), save);
-        for(int j = 0; j<col+1; j++){
-            map[i][j] = temp[j];
-        }
-    }
-    */
+    printf("%d elem van",itemCount);
 
     fclose(save);
     return map;
@@ -63,9 +70,9 @@ char** loadsave(const char* filename){
 
 void printMap(char** map){
     printf("\n\n\n");
-    int rowLength = sizeof(map);
+    int rowLength = 9;
+    int colLength = 9;
     for(int i = 0; i<rowLength; i++){
-        int colLength = sizeof(map[i]);
         for(int j = 0; j<colLength; j++){
             printf("%c", map[i][j]);
         }
@@ -75,10 +82,10 @@ void printMap(char** map){
 
 void nextState(char** map){
 
-    int rowLength = sizeof(map);
+    int rowLength = 9;
+    int colLength = 9;
     char** newMap = (char**) malloc(rowLength * sizeof(char*));
     for(int i = 0; i<rowLength; i++){
-        int colLength = sizeof(map[i]);
         newMap[i] = (char*) malloc(colLength * sizeof(char));
         for(int j = 0; j<colLength; j++){
             int count = countNeighbours(map, i, j);
@@ -108,14 +115,14 @@ void nextState(char** map){
     for(int i = 0; i<rowLength; i++){
         map[i] = newMap[i];
     }
-    freeMap(newMap);
+    //freeMap(newMap);
 }
 
 int countNeighbours(char** map,  int row, int col){
     int count = 0;
-    int rowLength = sizeof(map);
+    int rowLength = 9;
+    int colLength = 9;
     for(int i = row-1; i<=row+1; i++){
-        int colLength = sizeof(map[i]);
         for(int j = col-1; j<=col+1; j++){
             if(i < 0 || i >= rowLength) continue;
             if(j < 0 || j >= colLength) continue;
