@@ -30,7 +30,8 @@ int countCols(char** map){
     return colCount;
 }
 
-char** loadsave(const char* filename){
+//saves rwos and cols for further use
+char** loadsave(const char* filename, int* readRows, int* readCols){
     int row;
     int col;
     //file beolvasása
@@ -42,6 +43,8 @@ char** loadsave(const char* filename){
     }
     //file fejlécének beolvasása
     fscanf(save, "%d;%d\n", &row, &col);
+    *readRows = row;
+    *readCols = col;
     //játéktér lefoglalása
     char** map = (char**) malloc(row * sizeof(char*));
     //hibakezelés
@@ -68,10 +71,8 @@ char** loadsave(const char* filename){
     return map;
 }
 
-void printMap(char** map){
+void printMap(char** map, int rowLength, int colLength){
     printf("\n\n\n");
-    int rowLength = 9;
-    int colLength = 9;
     for(int i = 0; i<rowLength; i++){
         for(int j = 0; j<colLength; j++){
             printf("%c", map[i][j]);
@@ -80,15 +81,13 @@ void printMap(char** map){
     }
 }
 
-void nextState(char** map){
+void nextState(char** map, int rowLength, int colLength){
 
-    int rowLength = 9;
-    int colLength = 9;
     char** newMap = (char**) malloc(rowLength * sizeof(char*));
     for(int i = 0; i<rowLength; i++){
         newMap[i] = (char*) malloc(colLength * sizeof(char));
         for(int j = 0; j<colLength; j++){
-            int count = countNeighbours(map, i, j);
+            int count = countNeighbours(map, i, j, rowLength, colLength);
             bool alive = false;
             if(map[i][j] == '#'){
                 if(count < 2) alive = false;
@@ -118,10 +117,8 @@ void nextState(char** map){
     //freeMap(newMap);
 }
 
-int countNeighbours(char** map,  int row, int col){
+int countNeighbours(char** map,  int row, int col, int rowLength, int colLength){
     int count = 0;
-    int rowLength = 9;
-    int colLength = 9;
     for(int i = row-1; i<=row+1; i++){
         for(int j = col-1; j<=col+1; j++){
             if(i < 0 || i >= rowLength) continue;
@@ -135,12 +132,12 @@ int countNeighbours(char** map,  int row, int col){
 
 
 int main(){
-
-    char** amongus = loadsave("Saves/amongus.txt");
-    printMap(amongus);
+    int rowLength, colLength;
+    char** amongus = loadsave("Saves/amongus.txt", &rowLength, &colLength);
+    printMap(amongus, rowLength, colLength);
     printf("\n\n\n");
-    nextState(amongus);
-    printMap(amongus);
+    nextState(amongus, rowLength, colLength);
+    printMap(amongus, rowLength, colLength);
 
 
 
