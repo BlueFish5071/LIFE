@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1699731614 source:c:\users\debre\documents\prog\life\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+
+1699894792 source:c:\users\debre\downloads\life-main\life-main\life\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"debugmalloc.h"
+
+1699888430 c:\users\debre\downloads\life-main\life-main\life\debugmalloc.h
+	<stdbool.h>
+	<stddef.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<string.h>
+	<stdarg.h>
+	<process.h>
+	<unistd.h>
+
