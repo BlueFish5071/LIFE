@@ -62,12 +62,12 @@ void printMap(char** map, int rowLength, int colLength){
 }
 
 void nextState(char** map, int rowLength, int colLength){
-
+    int count;
     char** newMap = (char**) malloc(rowLength * sizeof(char*));
     for(int i = 0; i<rowLength; i++){
         newMap[i] = (char*) malloc(colLength * sizeof(char));
         for(int j = 0; j<colLength; j++){
-            int count = countNeighbours(map, i, j, rowLength, colLength);
+            count = countNeighbours(map, i, j, rowLength, colLength);
             bool alive = false;
             if(map[i][j] == '#'){
                 if(count < 2) alive = false;
@@ -114,17 +114,15 @@ void printMenu(){
 char* getTime(){
     //format: Wed Nov 22 13:29:49 2023
     //source: https://www.ibm.com/docs/en/i/7.2?topic=functions-ctime-convert-time-character-string
-    //char* currentTime;
     time_t ltime;
     time(&ltime);
-    //currentTime = ctime(&ltime);
-    //return currentTime;
     return ctime(&ltime);
 }
 
 char* createFilename(char* time){
     //format: Saves/DD_MM_YYYY_HH_MN_SC.txt\0 (30 characters)
-    char destName[30];
+    //char destName[30];
+    char* destName = malloc(30);
     int day, mon, yr, hr, min, sec;
     char monthStr[4];
     for(int i = 0; i<3; i++)
@@ -137,16 +135,26 @@ char* createFilename(char* time){
     char* ptrMonth = strstr(monthsList, monthStr);      //honap megkeresese a listaban
     mon = (ptrMonth-monthsList)/3 + 1;                 //honapot megkapjuk ha visszaszamolunk a megtalalt mutatobol
     //filenev osszerakasa
-    sprintf(destName, "Saves/%.2d_%.2d_%.4d_%.2d_%.2d_%.2d.txt\0",
+    sprintf(destName, "Saves/%.2d_%.2d_%.4d_%.2d_%.2d_%.2d.txt",
             day, mon, yr, hr, min, sec);
-    printf("%s\n", destName);
+    destName[29] = '\0';
+    //printf("%s\n", destName);
     return destName;
 }
 
 void saveMap(char** map, int rowLength, int colLength){
-    char* filename = createFilename(getTime());
-    //FILE* newSave = fopen("Saves/",'w+');
-    //fclose(newSave);
+    char* filename = createFilename(getTime());     //filenev generalasa
+    printf("Mentes helye: %s\n", filename);
+    FILE* save = fopen(filename, "w");              //file letrehozasa
+    //file feltoltese karakterenkent
+    for(int i = 0; i<rowLength; i++){
+        for(int j = 0; j<colLength; j++){
+            fputc(map[i][j], save);
+        }
+        fputc('\n', save);
+    }
+    free(filename);
+    fclose(save);
 }
 
 int chooseMenu(){
