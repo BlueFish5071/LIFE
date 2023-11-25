@@ -11,21 +11,23 @@ void freeMap(char** _map, int rowLength){
     free(_map);
 }
 
-char** loadSave(const char* filename, int* readRows, int* readCols){
+char** loadSave(int* readRows, int* readCols){
     int row, col;
-    //file beolvasása
+    //file beolvasasa
+    char filename[30];
+    scanf("%s", filename);
     FILE* save = fopen(filename, "r");
-    //hibakezelés
+    //hibakezeles
     if(save == NULL){
         perror("nagy a gond");
         return NULL;
     }
-    //file fejlécének beolvasása
+    //file fejlecenek beolvasasa
     fscanf(save, "%d;%d\n", &row, &col);
-    //saves rows and cols for further use
+    //parameterben visszaadja sorok es oszlopok hosszat
     *readRows = row;
     *readCols = col;
-    //játéktér lefoglalása
+    //jatekter lefoglalasa
     char** map = (char**) malloc(row * sizeof(char*));
     //hibakezelés
     if(map == NULL){
@@ -48,6 +50,35 @@ char** loadSave(const char* filename, int* readRows, int* readCols){
     //printf("%d elem van",itemCount);
 
     fclose(save);
+    return map;
+}
+
+char** inputMap(int* inputRows, int* inputCols){
+    int row, col;
+    printf("sor;oszlop: ");
+    //palya meretenek beolvasasa
+    scanf("%d;%d", &row, &col);
+    //parameterben visszaadja sorok es oszlopok hosszat
+    *inputRows = row;
+    *inputCols = col;
+    //jatekter lefoglalasa
+    char** map = (char**) malloc(row * sizeof(char*));
+    //hibakezelés
+    if(map == NULL){
+        perror("nagy a gond");
+        return NULL;
+    }
+    //sorok lefoglalása és feltöltése
+    for(int i = 0; i<row; i++){
+        map[i] = (char*) malloc(col*sizeof(char));
+        for(int j = 0; j<col; j++){
+            printf("[%d][%d]: ", i, j);
+            scanf(" %c", &map[i][j]);
+            //whitespace before %c eliminates new line character
+            //source: https://www.codesdope.com/discussion/why-are-you-using-a-space-before-c-in-scanf-c-ch/
+        }
+    }
+    printf("\n\n\n");
     return map;
 }
 
@@ -108,7 +139,8 @@ void printMenu(){
     printf("[1] Mentes betoltese\n"
            "[2] Allapot mentese\n"
            "[3] Kovetkezo allapot\n"
-           "[4] Kilepes\n");
+           "[4] Kilepes\n"
+           "[5] Allapot begepelese\n");
 }
 
 char* getTime(){
@@ -147,6 +179,7 @@ void saveMap(char** map, int rowLength, int colLength){
     printf("Mentes helye: %s\n", filename);
     FILE* save = fopen(filename, "w");              //file letrehozasa
     //file feltoltese karakterenkent
+    fprintf(save, "%d;%d\n", rowLength, colLength);
     for(int i = 0; i<rowLength; i++){
         for(int j = 0; j<colLength; j++){
             fputc(map[i][j], save);
@@ -161,15 +194,14 @@ int chooseMenu(){
     printMenu();
     int choice;
     if(scanf("%d",&choice) != 1)
-        return 0;
-    if(choice < 1 || choice > 4)
-        return 0;
+        return 4;
+    if(choice < 1 || choice > 5)
+        return 4;
     return choice;
 }
 
 int main(){
     int rowLength, colLength;
-    //char** mapInstance = loadSave("Saves/mapInstance.txt", &rowLength, &colLength);
     char** mapInstance;
     int choice;
     do{
@@ -177,7 +209,7 @@ int main(){
         if(choice == 0) continue;
         switch(choice){
         case 1:
-            mapInstance = loadSave("Saves/save1.txt", &rowLength, &colLength);
+            mapInstance = loadSave(&rowLength, &colLength);
             printMap(mapInstance, rowLength, colLength);
             break;
         case 2:
@@ -192,6 +224,10 @@ int main(){
         case 4:
             freeMap(mapInstance, rowLength);
             exit(0);
+            break;
+        case 5:
+            mapInstance = inputMap(&rowLength, &colLength);
+            printMap(mapInstance, rowLength, colLength);
             break;
         default:
             break;
