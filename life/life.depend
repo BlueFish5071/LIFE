@@ -4,12 +4,16 @@
 	<stdlib.h>
 	<stdbool.h>
 
-1700902080 source:c:\users\debre\downloads\life-main\life-main\life\main.c
+1700943840 source:c:\users\debre\downloads\life-main\life-main\life\main.c
 	<stdio.h>
 	<stdlib.h>
-	<stdbool.h>
 	<time.h>
+	<stdbool.h>
 	"debugmalloc.h"
+	"print.h"
+	"filehandling.h"
+	"userinput.h"
+	"cells.h"
 
 1699888430 c:\users\debre\downloads\life-main\life-main\life\debugmalloc.h
 	<stdbool.h>
@@ -21,4 +25,39 @@
 	<stdarg.h>
 	<process.h>
 	<unistd.h>
+
+1700944195 source:c:\users\debre\downloads\life-main\life-main\life\print.c
+	<stdio.h>
+	"print.h"
+	"debugmalloc.h"
+
+1700943074 c:\users\debre\downloads\life-main\life-main\life\print.h
+
+1700944195 source:c:\users\debre\downloads\life-main\life-main\life\filehandling.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	"filehandling.h"
+	"print.h"
+	"cells.h"
+	"debugmalloc.h"
+
+1700942974 c:\users\debre\downloads\life-main\life-main\life\filehandling.h
+
+1700944195 source:c:\users\debre\downloads\life-main\life-main\life\userinput.c
+	<stdio.h>
+	<stdlib.h>
+	"debugmalloc.h"
+
+1700936808 c:\users\debre\downloads\life-main\life-main\life\userinput.h
+
+1700944195 source:c:\users\debre\downloads\life-main\life-main\life\cells.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"cells.h"
+	"debugmalloc.h"
+
+1700943676 c:\users\debre\downloads\life-main\life-main\life\cells.h
 
